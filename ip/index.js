@@ -1,5 +1,5 @@
 //axios import buraya gelecek
-
+import axios from "axios";
 var benimIP;
 
 
@@ -70,3 +70,68 @@ async function ipAdresimiAl(){
 
 
 //kodlar buraya gelecek
+
+const cardYapici = (data) => {
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  const bayrak = document.createElement("img");
+  bayrak.setAttribute("src", data.ülkebayrağı);
+  card.append(bayrak);
+
+  const cardInfo = document.createElement("div");
+  cardInfo.classList.add("card-info");
+  card.append(cardInfo);
+
+  const baslik = document.createElement("h3");
+  baslik.classList.add("ip");
+  baslik.textContent = `IP: ${data.sorgu}`;
+  cardInfo.append(baslik);
+
+  const ulkeBilgisi = document.createElement("p");
+  ulkeBilgisi.classList.add("ulke");
+  ulkeBilgisi.textContent = `${data.ülke} (${data.ülkeKodu})`;
+  cardInfo.append(ulkeBilgisi);
+
+  const enBoy = document.createElement("p");
+  enBoy.textContent = `Enlem: ${data.enlem} Boylam: ${data.boylam}`;
+  cardInfo.append(enBoy);
+
+  const sehirBilgi = document.createElement("p");
+  sehirBilgi.textContent = `Şehir: ${data.şehir}`;
+  cardInfo.append(sehirBilgi);
+
+  const saatDilimi = document.createElement("p");
+  saatDilimi.textContent = `Saat dilimi: ${data.saatdilimi}`;
+  cardInfo.append(saatDilimi);
+
+  const paraBirimi = document.createElement("p");
+  paraBirimi.textContent = `Para birimi: ${data.parabirimi}`;
+  cardInfo.append(paraBirimi);
+
+  const ispBilgi = document.createElement("p");
+  ispBilgi.textContent = `ISP: ${data.isp}`;
+  cardInfo.append(ispBilgi);
+
+  cardContainer.append(card);
+};
+
+const cardContainer = document.querySelector(".cards");
+
+async function setCardData() {
+  await ipAdresimiAl();
+
+  axios
+    .get(`https://apis.ergineer.com/ipgeoapi/${benimIP}`)
+    .then(function (response) {
+      // handle success
+      console.log(response);
+      cardContainer.append(cardYapici(response.data));
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    });
+}
+
+setCardData();
